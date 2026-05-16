@@ -1,7 +1,6 @@
 # Transformer: English → Indonesian Translation
 
 An implementation of the Transformer architecture to English–Indonesian translation. Also includes two inference experiments, greedy decoding and beam search
----
 
 
 ## Dataset
