@@ -98,13 +98,17 @@ The model handles simple conversational phrases correctly and consistently:
 - "I'm hungry" → "Aku lapar" ✓
 - "Thank you" → "Terima kasih" ✓
 - "He doesn't know what he is doing" → "Dia tidak tahu apa yang dia lakukan" ✓
+
+  
 These patterns appear frequently in the training data. 
  
 **Insight 2: Negation triggers repetition collapse**
  
 - "i haven't eaten yet" → "Aku belum pernah belum pernah" 
 - "I have never been to this place before" → "Aku tak pernah pernah pernah melakukan ini sebelum ini" 
-- "She will never ever do that again" → "Dia tidak pernah pernah melakukan itu lagi" 
+- "She will never ever do that again" → "Dia tidak pernah pernah melakukan itu lagi"
+
+  
 Because of minimal depth of construction understanding,  it gets stuck repeating the same tokens with no recovery.
  
 **Insight 3: Complex grammatical structure causes complete semantic collapse**
@@ -112,6 +116,7 @@ Because of minimal depth of construction understanding,  it gets stuck repeating
 - "The cat that the dog chased ran away" → "Yang Mulia itu menjadi seorang wanita yang telah di dalam neraka ." 
 - "The student who studied hard for the exam finally passed" → "( Dan siapa yang telah mati ) yakni bagi orang - orang yang beriman..." 
 - "I'm hungry because i haven't eaten yet" → "Aku karena karena karena belum pernah belum pernah di sini ."  (main clause "Aku lapar" completely lost)
+
 Relative clauses and subordinate structures, push the model to produce  unrelated ouputs. Interesting part is on the second sentence, it's translated to a Quran verse. Which is a dominant pattern in the dataset.
 
 
@@ -126,6 +131,7 @@ Relative clauses and subordinate structures, push the model to produce  unrelate
 "I would have gone if you had asked me":
 - Greedy: "Aku akan pergi jika kau punya aku punya aku ." — "punya aku" repeated 
 - k=2 / k=3 / k=4: "Aku akan pergi jika kau punya aku ." — one fewer repetition
+
 For sentences where the model has partial knowledge, beam search fix the repetition:
  
 
@@ -138,6 +144,7 @@ For sentences where the model has partial knowledge, beam search fix the repetit
 "The more you learn, the more you grow":
 - Greedy / k=2: "Yang lebih banyak lagi , kau lebih baik" — vague but preserves "kau" (you)
 - k=3 / k=4: "Orang - orang yang Anda , Anda lebih baik dari Anda ." — degrades into third-person hallucination 
+
 
 Because of its characteristics of exploring more paths, beam search confidently selects the most wrong one if all paths are wrong. The results are sometimes worse than greedy
 
