@@ -23,7 +23,7 @@ A single encoder–decoder Transformer, following the original paper.
 > **Note:** The original paper uses 6 encoder and 6 decoder layers. This implementation uses only 1 each.
 
 | Hyperparameter | Value |
-|||
+|---|---|
 | Embedding dimension (`d_model`) | 256 |
 | Feed-forward hidden size | 512 |
 | Attention heads | 8 |
@@ -43,7 +43,7 @@ A single encoder–decoder Transformer, following the original paper.
 ## Training Setup
 
 | Setting | Value |
-|||
+|---|---|
 | Epochs | 10 |
 | Learning rate | 1e-4 |
 | Dataset size | 50,000 pairs |
@@ -68,7 +68,7 @@ Maintains top-k candidate sequences at every step. Tested with beam sizes k=2, k
 
 ### Result
 | English Input | Ground Truth (ID) | Greedy | Beam k=2 | Beam k=3 | Beam k=4 |
-|||||||
+|---|---|---|---|---|---|
 | today is tuesday | Hari ini adalah selasa | Di hari ini adalah hari | Di hari ini sangat penting | Di hari ini sangat penting | Di hari ini . |
 | Hello, how are you? | Halo, apa kabarmu? | Halo , bagaimana kau ? | Halo , bagaimana kau ? | Halo , bagaimana kau ? | Halo , bagaimana kau ? |
 | I'm fine, thank you. | Aku baik, terimakasih | Aku baik - baik saja . | Aku baik - baik saja . | Aku baik - baik saja . | Aku baik - baik saja . |
