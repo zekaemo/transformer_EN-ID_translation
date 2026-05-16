@@ -92,14 +92,14 @@ Maintains top-k candidate sequences at every step. Tested with beam sizes k=2, k
  
 ### Experiment 1 — Greedy Inference
  
-**Insight 1: Short, high-frequency sentences translate well**
+**Insight 1: Short sentences translate well**
  
 The model handles simple conversational phrases correctly and consistently:
 - "I'm hungry" → "Aku lapar" ✓
 - "Thank you" → "Terima kasih" ✓
 - "He doesn't know what he is doing" → "Dia tidak tahu apa yang dia lakukan" ✓
 
-  
+
 These patterns appear frequently in the training data. 
  
 **Insight 2: Negation triggers repetition collapse**
@@ -123,27 +123,30 @@ Relative clauses and subordinate structures, push the model to produce  unrelate
  
 ### Experiment 2 — Beam Search (k = 2, 3, 4)
   
-**Insight 1: Minor but real improvement on simple negation**
+**Insight 1: Minor improvement on simple negation**
 
 "She will never ever do that again":
 - Greedy: "Dia tidak pernah pernah melakukan itu lagi" — double "pernah" 
-- k=2 / k=3 / k=4: "Dia takkan pernah melakukan itu lagi" ✓ — cleaner, more natural Indonesian
+- k=2 / k=3 / k=4: "Dia takkan pernah melakukan itu lagi" ✓ — more natural Indonesian
+  
+
 "I would have gone if you had asked me":
 - Greedy: "Aku akan pergi jika kau punya aku punya aku ." — "punya aku" repeated 
 - k=2 / k=3 / k=4: "Aku akan pergi jika kau punya aku ." — one fewer repetition
 
-For sentences where the model has partial knowledge, beam search fix the repetition:
+For sentences where the model has partial knowledge, beam search fix the repetition
  
 
 **Insight 2: Grammar error still persists**
  
 
 "i haven't eaten yet":
-- Greedy / k=2: "Aku belum pernah belum pernah" — repeats but keeps correct subject "Aku"
-- k=3 / k=4: "Orang - orang yang belum pernah terjadi ." — subject completely hallucinated to "people", semantically further from correct 
+- Greedy / k=2: "Aku belum pernah belum pernah" — repetition but keeps correct subject "Aku"
+- k=3 / k=4: "Orang - orang yang belum pernah terjadi ." — subject hallucinated to "people", more unrelated 
+
 "The more you learn, the more you grow":
-- Greedy / k=2: "Yang lebih banyak lagi , kau lebih baik" — vague but preserves "kau" (you)
-- k=3 / k=4: "Orang - orang yang Anda , Anda lebih baik dari Anda ." — degrades into third-person hallucination 
+- Greedy / k=2: "Yang lebih banyak lagi , kau lebih baik" — incorrect but preserves "kau" (you)
+- k=3 / k=4: "Orang - orang yang Anda , Anda lebih baik dari Anda ." — object changes into third-person hallucination 
 
 
 Because of its characteristics of exploring more paths, beam search confidently selects the most wrong one if all paths are wrong. The results are sometimes worse than greedy
@@ -156,6 +159,6 @@ Greedy fails because it has no error recovery. Beam search was supposed to fix t
 
 The root causes are architectural and data constraints that no inference strategy can overcome:
  
-- **Shallow architecture** — 1 encoder + 1 decoder layer lacks the depth to learn complex syntactic structure. The original paper uses 6 of each for good reason; each additional layer learns progressively more abstract representations.
-- **Undertrained** — 10 epochs on 50k samples means rare constructions like emphatic negation or relative clauses have simply not been seen enough times to learn reliably.
-- **Dataset bias** — OPUS-100 EN-ID contains heavy religious text. The model defaults to these patterns under uncertainty.
+- **Shallow architecture** — 1 encoder + 1 decoder layer lacks the depth to learn complex syntactic structure. The original paper uses 6 of each for good reason.
+- **Undertrained** — 10 epochs on 50k samples means some constructions like negation or relative clauses are not seen enough.
+- **Dataset bias** — OPUS-100 EN-ID contains heavy religious text. The model defaults to these patterns.
